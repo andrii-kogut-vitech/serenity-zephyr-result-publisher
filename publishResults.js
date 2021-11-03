@@ -14,9 +14,9 @@ class PublishResults {
     ;
 
     status = {
-      'SUCCESS': 'pass',
-      'ERROR': 'fail',
-      'FAILURE': 'fail'
+        'SUCCESS': 'pass',
+        'ERROR': 'fail',
+        'FAILURE': 'fail'
     };
 
 
@@ -36,10 +36,11 @@ class PublishResults {
         return JSON.parse(fs.readFileSync(process.env.JSON_INPUT_PATH + filename))
     }
 
-    addStep(step){
+    addStep(step) {
         return {
             "inline": {
-                "description": step}
+                "description": step
+            }
         }
     }
 
@@ -55,10 +56,12 @@ class PublishResults {
             actualResult = actualResult.concat(resultImg)
         }
         if (step.exception) {
-            // actualResult = actualResult.concat(`<div>${JSON.stringify(step.exception,undefined, 4)}</div>`)
-            actualResult = actualResult.concat(JSON.stringify(step.exception,undefined, 4))
+            let exception = JSON.stringify(step.exception, undefined, 4)
+            exception = exception.replace(/\n/g, `<br>`)
+            exception = exception.replace(/\s/g, `&emsp;`)
+            actualResult = actualResult.concat(`<b>Stacktrace:</b><br>${exception}`)
         }
-        if (actualResult){
+        if (actualResult) {
             result.actualResult = actualResult
         }
         return result;
@@ -80,19 +83,14 @@ class PublishResults {
                 let steps = []
                 let stepResult = []
                 let testCaseKey = this.zephyr.getTestCaseIdByTitle(testCaseName, folderId)
-                console.log(testCaseName);
                 let testSteps = json.testSteps[testCaseSequence].children;
                 let testCaseResult = this.status[json.testSteps[testCaseSequence].result]
                 testSteps.forEach(step => {
                     steps.push(this.addStep(step.description))
                     stepResult.push(this.addStepResult(step))
-                    console.log(step.description);
-                    console.log(step.result);
                 });
-                this.zephyr.addStepsToTestCase(testCaseKey,steps)
+                this.zephyr.addStepsToTestCase(testCaseKey, steps)
                 this.zephyr.publishResults(cycleKey, testCaseKey, testCaseResult, stepResult)
-                console.log('========')
-
             }
 
         }
