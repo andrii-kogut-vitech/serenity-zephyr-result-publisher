@@ -33,7 +33,7 @@ class ZephyrScaleClient {
             throw new Error("Missing Zephyr Scale options");
         }
         if (options[name] == null) {
-            throw new Error(`Missing ${name} value. Please update Zephyr Scale option in wdio.conf`);
+            throw new Error(`Missing ${name} value. Please update Zephyr Scale option in environment variables`);
         }
     }
 

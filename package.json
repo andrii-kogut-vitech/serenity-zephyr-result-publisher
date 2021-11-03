@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "commonjs",
+  "scripts": {"publisher": "node index.js"},
   "dependencies": {
     "npm": "^8.1.2",
     "sync-request": "^6.1.0",
